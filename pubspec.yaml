@@ -1,8 +1,8 @@
 name: localized_string
-description: A new Flutter package project.
+description: LocalizedString is an implementation of String that depends on BuildContext.
 version: 0.0.1
-author:
-homepage:
+homepage: http://andrey.kabylin.ru
+repository: https://github.com/sysint64/localized_string
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

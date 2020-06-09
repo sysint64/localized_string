@@ -1,30 +1,79 @@
 library localized_string;
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:uuid/uuid.dart';
 
-class LocalizedString {
-  final String Function(BuildContext) localize;
+abstract class LocalizedString extends Equatable {
+  static LocalizedString fromString(String string) =>
+      FactoryLocalizedString((_) => string, string);
+
+  static LocalizedString empty() => FactoryLocalizedString((_) => '', '');
+
+  static LocalizedString fromFactory(
+    Function(BuildContext) factory, [
+    String key,
+  ]) =>
+      FactoryLocalizedString(factory, key ?? Uuid().v4());
+
+  LocalizedString operator +(LocalizedString other) {
+    return ConcatLocalizedString(this, other);
+  }
+
+  String localize(BuildContext context);
+}
+
+class FactoryLocalizedString extends LocalizedString {
+  final String Function(BuildContext) _localize;
   final String key;
 
-  LocalizedString(this.localize, [this.key]);
-
-  static fromString(String string) => LocalizedString((_) => string, string);
+  FactoryLocalizedString(this._localize, this.key)
+      : assert(_localize != null),
+        assert(key != null);
 
   @override
-  bool operator ==(Object other) {
-    if (key != null) {
-      return other is LocalizedString && other.key == key;
-    } else {
-      return super == other;
-    }
+  String localize(BuildContext context) {
+    return _localize(context);
   }
 
   @override
-  int get hashCode {
-    if (key != null) {
-      return key.hashCode;
-    } else {
-      return super.hashCode;
+  List<Object> get props => [key];
+}
+
+class ConcatLocalizedString extends LocalizedString {
+  final LocalizedString lhs;
+  final LocalizedString rhs;
+
+  ConcatLocalizedString(this.lhs, this.rhs)
+      : assert(lhs != null),
+        assert(rhs != null);
+
+  @override
+  String localize(BuildContext context) {
+    return lhs.localize(context) + rhs.localize(context);
+  }
+
+  @override
+  List<Object> get props => [lhs, rhs];
+}
+
+extension JoinLocalize on List<LocalizedString> {
+  LocalizedString joinLocalizedS(String separator) {
+    return joinLocalized(LocalizedString.fromString(separator));
+  }
+
+  LocalizedString joinLocalized(LocalizedString separator) {
+    var result = LocalizedString.fromString('');
+
+    for (var i = 0; i < length; i++) {
+      final component = this[i];
+      result += component;
+
+      if (i < length - 1) {
+        result += separator;
+      }
     }
+
+    return result;
   }
 }

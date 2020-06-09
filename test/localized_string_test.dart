@@ -20,29 +20,54 @@ void main() {
 
   test('compare localized strings with keys - equals', () async {
     expect(
-      LocalizedString((_) => 'Test', 'test') ==
-          LocalizedString((_) => 'Test', 'test'),
+      LocalizedString.fromFactory((_) => 'Test', 'test') ==
+          LocalizedString.fromFactory((_) => 'Test', 'test'),
       true,
     );
   });
 
   test('compare localized strings with keys - not equals', () async {
     expect(
-      LocalizedString((_) => 'Test', 'test') !=
-          LocalizedString((_) => 'Test', 'test2'),
+      LocalizedString.fromFactory((_) => 'Test', 'test') !=
+          LocalizedString.fromFactory((_) => 'Test', 'test2'),
       true,
     );
   });
 
   test('compare localized strings without keys - not equals', () async {
     expect(
-      LocalizedString((_) => 'Test') != LocalizedString((_) => 'Test'),
+      LocalizedString.fromFactory((_) => 'Test') !=
+          LocalizedString.fromFactory((_) => 'Test'),
       true,
     );
   });
 
   test('compare localized strings without keys - equals', () async {
-    final str = LocalizedString((_) => 'Test');
+    final str = LocalizedString.fromFactory((_) => 'Test');
     expect(str == str, true);
+  });
+
+  test('localized factory string', () async {
+    final str = LocalizedString.fromFactory((_) => 'Test');
+    expect(str.localize(null), 'Test');
+  });
+
+  test('localized concat string', () async {
+    final hello = LocalizedString.fromFactory((_) => 'Hello');
+    final space = LocalizedString.fromFactory((_) => ' ');
+    final world = LocalizedString.fromFactory((_) => 'World!');
+
+    final concat = hello + space + world;
+
+    expect(concat.localize(null), 'Hello World!');
+  });
+
+  test('localized concat string - join', () async {
+    final hello = LocalizedString.fromFactory((_) => 'Hello');
+    final world = LocalizedString.fromFactory((_) => 'World!');
+
+    final concat = [hello, world].joinLocalizedS(' ');
+
+    expect(concat.localize(null), 'Hello World!');
   });
 }

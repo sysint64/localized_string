@@ -16,8 +16,14 @@ abstract class LocalizedString extends Equatable {
   ]) =>
       FactoryLocalizedString(factory, key ?? Uuid().v4());
 
-  LocalizedString operator +(LocalizedString other) {
-    return ConcatLocalizedString(this, other);
+  LocalizedString operator +(Object other) {
+    if (other is LocalizedString) {
+      return ConcatLocalizedString(this, other as LocalizedString);
+    } else if (other is String) {
+      return ConcatLocalizedString(this, LocalizedString.fromString(other as String));
+    } else {
+      throw UnsupportedError('Unknown type for $other');
+    }
   }
 
   String localize(BuildContext context);

@@ -1,6 +1,6 @@
 name: localized_string
 description: LocalizedString is an implementation of String that depends on BuildContext.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/sysint64/localized_string
 
 environment:

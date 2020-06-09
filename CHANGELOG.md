@@ -1,3 +1,7 @@
+## [0.1.1]
+
+* fixed warning
+
 ## [0.1.0]
 
 * string concatenations

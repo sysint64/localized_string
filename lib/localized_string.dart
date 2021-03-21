@@ -5,22 +5,21 @@ import 'package:flutter/widgets.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class LocalizedString extends Equatable {
-  static LocalizedString fromString(String string) =>
-      FactoryLocalizedString((_) => string, string);
+  static LocalizedString fromString(String string) => FactoryLocalizedString((_) => string, string);
 
   static LocalizedString empty() => FactoryLocalizedString((_) => '', '');
 
   static LocalizedString fromFactory(
-    Function(BuildContext) factory, [
-    String key,
+    String Function(BuildContext) factory, [
+    String? key,
   ]) =>
       FactoryLocalizedString(factory, key ?? Uuid().v4());
 
   LocalizedString operator +(Object other) {
     if (other is LocalizedString) {
-      return ConcatLocalizedString(this, other as LocalizedString);
+      return ConcatLocalizedString(this, other);
     } else if (other is String) {
-      return ConcatLocalizedString(this, LocalizedString.fromString(other as String));
+      return ConcatLocalizedString(this, LocalizedString.fromString(other));
     } else {
       throw UnsupportedError('Unknown type for $other');
     }
@@ -33,9 +32,7 @@ class FactoryLocalizedString extends LocalizedString {
   final String Function(BuildContext) _localize;
   final String key;
 
-  FactoryLocalizedString(this._localize, this.key)
-      : assert(_localize != null),
-        assert(key != null);
+  FactoryLocalizedString(this._localize, this.key);
 
   @override
   String localize(BuildContext context) {
@@ -50,9 +47,7 @@ class ConcatLocalizedString extends LocalizedString {
   final LocalizedString lhs;
   final LocalizedString rhs;
 
-  ConcatLocalizedString(this.lhs, this.rhs)
-      : assert(lhs != null),
-        assert(rhs != null);
+  ConcatLocalizedString(this.lhs, this.rhs);
 
   @override
   String localize(BuildContext context) {

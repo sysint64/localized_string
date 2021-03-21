@@ -1,17 +1,17 @@
 name: localized_string
 description: LocalizedString is an implementation of String that depends on BuildContext.
-version: 0.1.1
+version: 0.2.0
 homepage: https://github.com/sysint64/localized_string
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  equatable: ^1.2.0
-  uuid: ^2.0.4
+  equatable: ^2.0.0
+  uuid: ^3.0.1
 
 dev_dependencies:
   flutter_test:

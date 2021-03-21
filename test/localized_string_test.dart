@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:localized_string/localized_string.dart';
@@ -14,12 +15,19 @@ void main() {
     assert(s1 != s3);
   });
 
-  test('test doc snippet 2', () async {
-    final s1 = LocalizedString.fromString("Hello");
-    final s2 = LocalizedString.fromString("world");
-    final s = s1 + ' ' + s2;
+  testWidgets('test doc snippet 2', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      Builder(
+        builder: (BuildContext context) {
+          final s1 = LocalizedString.fromString("Hello");
+          final s2 = LocalizedString.fromString("world");
+          final s = s1 + ' ' + s2;
 
-    assert(s.localize(null) == 'Hello world');
+          assert(s.localize(context) == 'Hello world');
+          return Placeholder();
+        },
+      ),
+    );
   });
 
   test('compare localized strings fromString - equals', () async {
@@ -31,8 +39,7 @@ void main() {
 
   test('compare localized strings fromString - not equals', () async {
     expect(
-      LocalizedString.fromString('Test') !=
-          LocalizedString.fromString('Test 2'),
+      LocalizedString.fromString('Test') != LocalizedString.fromString('Test 2'),
       true,
     );
   });
@@ -55,8 +62,7 @@ void main() {
 
   test('compare localized strings without keys - not equals', () async {
     expect(
-      LocalizedString.fromFactory((_) => 'Test') !=
-          LocalizedString.fromFactory((_) => 'Test'),
+      LocalizedString.fromFactory((_) => 'Test') != LocalizedString.fromFactory((_) => 'Test'),
       true,
     );
   });
@@ -66,27 +72,49 @@ void main() {
     expect(str == str, true);
   });
 
-  test('localized factory string', () async {
-    final str = LocalizedString.fromFactory((_) => 'Test');
-    expect(str.localize(null), 'Test');
+  testWidgets('localized factory string', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      Builder(
+        builder: (BuildContext context) {
+          final str = LocalizedString.fromFactory((_) => 'Test');
+          expect(str.localize(context), 'Test');
+
+          return Placeholder();
+        },
+      ),
+    );
   });
 
-  test('localized concat string', () async {
-    final hello = LocalizedString.fromFactory((_) => 'Hello');
-    final space = LocalizedString.fromFactory((_) => ' ');
-    final world = LocalizedString.fromFactory((_) => 'World!');
+  testWidgets('localized concat string', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      Builder(
+        builder: (BuildContext context) {
+          final hello = LocalizedString.fromFactory((_) => 'Hello');
+          final space = LocalizedString.fromFactory((_) => ' ');
+          final world = LocalizedString.fromFactory((_) => 'World!');
 
-    final concat = hello + space + world;
+          final concat = hello + space + world;
 
-    expect(concat.localize(null), 'Hello World!');
+          expect(concat.localize(context), 'Hello World!');
+          return Placeholder();
+        },
+      ),
+    );
   });
 
-  test('localized concat string - join', () async {
-    final hello = LocalizedString.fromFactory((_) => 'Hello');
-    final world = LocalizedString.fromFactory((_) => 'World!');
+  testWidgets('localized concat string - join', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      Builder(
+        builder: (BuildContext context) {
+          final hello = LocalizedString.fromFactory((_) => 'Hello');
+          final world = LocalizedString.fromFactory((_) => 'World!');
 
-    final concat = [hello, world].joinLocalizedS(' ');
+          final concat = [hello, world].joinLocalizedS(' ');
 
-    expect(concat.localize(null), 'Hello World!');
+          expect(concat.localize(context), 'Hello World!');
+          return Placeholder();
+        },
+      ),
+    );
   });
 }
